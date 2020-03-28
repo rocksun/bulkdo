@@ -44,3 +44,23 @@ func Test_readItemsWithError(t *testing.T) {
 		t.Errorf("Expected error, but got nil")
 	}
 }
+
+func Test_parseCommands(t *testing.T) {
+	itemStrs := strings.NewReader(`t1,t2,t3
+a1,a2,a3
+b1,b2,b3`)
+	items, _ := readItems(itemStrs)
+	template := strings.NewReader("echo {{ .v.t1 }} {{ .v.t2 }}")
+	commands, err := parseCommands(template, items)
+	if err != nil {
+		t.Errorf("Expected no error, but got %v", err)
+	}
+	if len(commands) != 2 {
+		t.Errorf("Expected length is 2, but got %v", len(commands))
+	}
+
+	expected1 := "echo a1 a2"
+	if expected1 != commands[0] {
+		t.Errorf("Expected is '%v', but got '%v'", expected1, commands[0])
+	}
+}
