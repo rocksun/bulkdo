@@ -1,6 +1,7 @@
 package bulkdo
 
 import (
+	"errors"
 	"strings"
 	"testing"
 )
@@ -26,5 +27,20 @@ b1,b2,b3`)
 	expectedItem2T2 := "b2"
 	if items[1]["t2"] != expectedItem2T2 {
 		t.Errorf("expectedItem2T2 is %v, but got %v", expectedItem2T2, items[1]["t2"])
+	}
+}
+
+type MockReader struct {
+}
+
+func (r *MockReader) Read(p []byte) (n int, err error) {
+	return 0, errors.New("Mock Error")
+}
+
+func Test_readItemsWithError(t *testing.T) {
+	itemStrs := &MockReader{}
+	_, err := readItems(itemStrs)
+	if err == nil {
+		t.Errorf("Expected error, but got nil")
 	}
 }
