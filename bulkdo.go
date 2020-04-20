@@ -5,6 +5,8 @@ import (
 	"encoding/csv"
 	"io"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"text/template"
 )
 
@@ -64,4 +66,25 @@ func parseCommands(tplReader io.Reader, items []map[string]string) ([]string, er
 	}
 
 	return commands, nil
+}
+
+func execCommands(cmds []string) ([]string, error) {
+	outs := make([]string, 0)
+	for _, cmd := range cmds {
+		file, err := ioutil.TempFile("", "bulkdo.*.bat")
+		if err != nil {
+			return nil, err
+		}
+		defer os.Remove(file.Name())
+
+		file.WriteString(cmd)
+		command := exec.Command("cmd.exe", "/c", file.Name())
+		out, exeErr := command.CombinedOutput()
+		if exeErr != nil {
+			return nil, exeErr
+		}
+		outs = append(outs, string(out))
+
+	}
+	return outs, nil
 }

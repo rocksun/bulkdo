@@ -64,3 +64,31 @@ b1,b2,b3`)
 		t.Errorf("Expected is '%v', but got '%v'", expected1, commands[0])
 	}
 }
+
+func Test_execCommands(t *testing.T) {
+	cmds := []string{`@echo off
+echo a1
+echo b1`,
+		`@echo off
+echo a2
+echo b2`,
+		`@echo off
+echo a3
+echo b3`,
+	}
+
+	outs, err := execCommands(cmds)
+	if err != nil {
+		t.Errorf("Exepected no err, but got %v", err)
+	}
+
+	if len(outs) != 3 {
+		t.Errorf("Expected length is 3, but got %v", len(outs))
+	}
+
+	expected2 := "a2\r\nb2\r\n"
+	if expected2 != outs[1] {
+		t.Errorf("Expected '%v', but got '%v'", expected2, outs[1])
+	}
+
+}
