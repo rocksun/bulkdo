@@ -19,3 +19,22 @@
 1. 创建 execCommands 方法声明， 接受1个参数，commands string slice，返回 output string slice 和 error。
 2. 编写测试方法
 3. 完成 execCommands
+
+## BulkDo 和 命令行
+
+首先是 BulkDo
+
+1. 创建 BulkDo 方法声明， 接受 2 个参数，然后是一个 模板 reader，一个参数的 reader ，返回 2 个值， output string slice 和 error。
+2. 编写测试方法
+3. 完成 BulkDo
+
+然后是命令行，命令行的运行方式是：
+
+```
+builkdo myecho1
+```
+
+读取 ~/.bulkdo/ 下的命令行模板，和当前路径下的 .bulkdoitems 参数，然后的调用 BulkDo 方法
+
+
+

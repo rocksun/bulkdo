@@ -92,3 +92,23 @@ echo b3`,
 	}
 
 }
+
+func TestBulkDo(t *testing.T) {
+	itemStrs := strings.NewReader(`t1,t2,t3
+a1,a2,a3
+b1,b2,b3`)
+	cmdTemplate := strings.NewReader(`@echo off
+echo {{ .v.t1 }} {{ .v.t2}}`)
+	outs, err := BulkDo(cmdTemplate, itemStrs)
+	if err != nil {
+		t.Errorf("Expected no err, but got %v", err)
+	}
+	if len(outs) != 2 {
+		t.Errorf("Expected len is 2, but got %v", len(outs))
+	}
+	expected2 := "b1 b2\r\n"
+	if expected2 != outs[1] {
+		t.Errorf("Expected is '%v', but got '%v'", expected2, outs[1])
+	}
+
+}
